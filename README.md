@@ -1,6 +1,6 @@
-# PagerDuty Local Auto-Ack
+# PagerDuty Auto-Ack
 
-Small local script that acknowledges PagerDuty incidents only when the configured user is currently on call.
+`pagerduty-auto-ack` installs the `pd-auto-ack` CLI. It acknowledges PagerDuty incidents only when the configured user is currently on call.
 
 It does only this:
 
@@ -14,7 +14,45 @@ The endpoint behavior was checked against PagerDuty's official API reference and
 - <https://developer.pagerduty.com/api-reference/>
 - <https://github.com/PagerDuty/api-schema>
 
-## Setup
+## Install
+
+From this checkout:
+
+```sh
+python3 -m pip install .
+```
+
+Or with `pipx`:
+
+```sh
+pipx install .
+```
+
+From GitHub:
+
+```sh
+pipx install git+https://github.com/nithishduda-ai/pagerduty-auto-ack.git
+```
+
+After install, verify:
+
+```sh
+pd-auto-ack --version
+```
+
+You can also run from a checkout without installing:
+
+```sh
+PYTHONPATH=src python3 -m pagerduty_auto_ack --help
+```
+
+The old script path still works for compatibility:
+
+```sh
+python3 pagerduty_auto_ack.py --help
+```
+
+## Configure
 
 Create a local `.env` based on `.env.example` and fill in:
 
@@ -32,38 +70,48 @@ The token needs permissions equivalent to:
 
 `PD_FROM_EMAIL` must be a valid PagerDuty user email for the account because PagerDuty requires the `From` header when updating incidents.
 
-## Dry Run
+## Commands
+
+Validate local configuration without calling PagerDuty:
+
+```sh
+pd-auto-ack doctor --env-file .env
+```
+
+Validate PagerDuty API access and show current on-call/incident state without acknowledging anything:
+
+```sh
+pd-auto-ack check --env-file .env
+```
 
 Dry-run is the default. It prints what would be acknowledged without changing PagerDuty:
 
 ```sh
-python3 pagerduty_auto_ack.py --env-file .env --once
+pd-auto-ack run --env-file .env --once
 ```
 
 Continuous dry-run polling:
 
 ```sh
-python3 pagerduty_auto_ack.py --env-file .env --watch --interval 30
+pd-auto-ack run --env-file .env --watch --interval 30
 ```
-
-## Live Mode
 
 Run continuously and actually acknowledge matching incidents:
 
 ```sh
-python3 pagerduty_auto_ack.py --env-file .env --watch --interval 30 --apply
+pd-auto-ack run --env-file .env --watch --interval 30 --apply
 ```
 
 Run once, useful from cron or another local scheduler:
 
 ```sh
-python3 pagerduty_auto_ack.py --env-file .env --once --apply
+pd-auto-ack run --env-file .env --once --apply
 ```
 
 Example cron entry for once-per-minute local polling:
 
 ```cron
-* * * * * cd /Users/nithish/Documents/Pagerduty && /usr/bin/env python3 pagerduty_auto_ack.py --env-file .env --once --apply >> pagerduty-auto-ack.log 2>&1
+* * * * * cd /Users/nithish/Documents/Pagerduty && /usr/bin/env pd-auto-ack run --env-file .env --once --apply >> pagerduty-auto-ack.log 2>&1
 ```
 
 ## Extra Safety Filters
@@ -78,3 +126,17 @@ PD_SCHEDULE_IDS=PSCHED123
 ```
 
 The script still requires the configured user to be actively on call before it looks for incidents.
+
+## Local Development
+
+Run tests:
+
+```sh
+PYTHONPATH=src python3 -m unittest
+```
+
+Compile-check the package:
+
+```sh
+PYTHONPYCACHEPREFIX=/private/tmp/pagerduty-pycache python3 -m py_compile pagerduty_auto_ack.py src/pagerduty_auto_ack/*.py tests/*.py
+```
