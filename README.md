@@ -84,9 +84,9 @@ The old script path still works for compatibility:
 python3 pagerduty_auto_ack.py --help
 ```
 
-## Configure
+## Quick Start
 
-Create a starter config file:
+Create a starter config file. This file will contain your PagerDuty API token, so keep it local and private.
 
 ```sh
 pd-auto-ack init --env-file ~/.pd-auto-ack.env
@@ -98,7 +98,7 @@ Then edit it:
 nano ~/.pd-auto-ack.env
 ```
 
-Fill in:
+Fill in these values:
 
 ```sh
 PD_API_TOKEN=...
@@ -108,30 +108,127 @@ PD_APPLY=false
 PD_POLL_SECONDS=30
 ```
 
+Run a local config check:
+
+```sh
+pd-auto-ack doctor --env-file ~/.pd-auto-ack.env
+```
+
+Then run a PagerDuty API check:
+
+```sh
+pd-auto-ack check --env-file ~/.pd-auto-ack.env
+```
+
+Example healthy output:
+
+```text
+PagerDuty API token is valid for user@example.com.
+On call now: EU Support Escalation Policy / EU Support Escalation / level 1
+Triggered incidents assigned to user: 0
+```
+
+That means the token works, the CLI can identify the PagerDuty user, the user is currently on call, and there are no triggered incidents assigned to them right now.
+
+Run one dry-run cycle:
+
+```sh
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --once
+```
+
+Run continuous dry-run mode:
+
+```sh
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30
+```
+
+Only after the dry-run output looks right, run live mode:
+
+```sh
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30 --apply
+```
+
+## Where To Get The Values
+
+`PD_API_TOKEN` is a PagerDuty REST API token. Create one in PagerDuty or ask a PagerDuty admin to create one with the required permissions below. Keep this token private.
+
+`PD_FROM_EMAIL` is the email address of a valid PagerDuty user in the same account. Use the email address you use to sign in to PagerDuty.
+
+`PD_USER_ID` is the PagerDuty user ID for the person whose on-call status should be checked. If the API token belongs to that same user, the CLI can usually infer it from `/users/me`, so the generated placeholder can be left in place for a first test:
+
+```sh
+PD_USER_ID=PAGERDUTY_USER_ID
+```
+
+After the token is configured, this command confirms which user the token belongs to:
+
+```sh
+pd-auto-ack check --env-file ~/.pd-auto-ack.env
+```
+
+## Required PagerDuty Access
+
 The token needs permissions equivalent to:
 
 - `oncalls.read`
 - `incidents.read`
 - `incidents.write`
 
-Required values:
+## Configuration Values
 
 - `PD_API_TOKEN`: PagerDuty REST API token.
 - `PD_USER_ID`: PagerDuty user ID for the person who should be checked as on call.
 - `PD_FROM_EMAIL`: Email of a valid PagerDuty user. PagerDuty requires this when updating incidents.
-
-Recommended values:
-
 - `PD_APPLY=false`: keeps the tool in dry-run mode by default.
 - `PD_POLL_SECONDS=30`: polling interval for `--watch` mode.
+- `PD_SERVICE_IDS`: optional comma-separated service ID allowlist.
+- `PD_TEAM_IDS`: optional comma-separated team ID allowlist.
+- `PD_ESCALATION_POLICY_IDS`: optional comma-separated escalation policy ID allowlist for on-call checks.
+- `PD_SCHEDULE_IDS`: optional comma-separated schedule ID allowlist for on-call checks.
+- `PD_REQUEST_TIMEOUT_SECONDS`: optional PagerDuty API request timeout.
+- `PD_MAX_PAGES`: optional safety limit for paginated PagerDuty list calls.
+
+`PD_USER_ID` and `PD_FROM_EMAIL` can often be inferred from `/users/me` if the API token belongs to the same user. Explicit values are still recommended for long-running jobs.
 
 `PD_FROM_EMAIL` must be a valid PagerDuty user email for the account because PagerDuty requires the `From` header when updating incidents.
+
+## How It Works
+
+Every poll cycle follows this decision flow:
+
+1. Load configuration from `--env-file`.
+2. Resolve the PagerDuty user from `PD_USER_ID` or `/users/me`.
+3. Call `GET /oncalls` for that user at the current time.
+4. Stop immediately if the user is not currently on call.
+5. Call `GET /incidents` for incidents assigned to that user with `statuses[]=triggered`.
+6. Stop if there are no matching triggered incidents.
+7. In dry-run mode, print what would be acknowledged.
+8. In live mode, call `PUT /incidents/{id}` with `status: acknowledged`.
 
 The CLI only acknowledges incidents when:
 
 - the configured user is currently on call
 - the incident is `triggered`
 - the incident is assigned to that user
+
+The CLI does not acknowledge incidents assigned to someone else. It does not acknowledge already acknowledged incidents. It does not resolve incidents, reassign incidents, edit titles, or add notes.
+
+## Dry-Run vs Live Mode
+
+Dry-run mode is the default. These commands do not change PagerDuty:
+
+```sh
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --once
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30
+```
+
+Live mode requires `--apply`:
+
+```sh
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30 --apply
+```
+
+You can also set `PD_APPLY=true` in the env file, but leaving `PD_APPLY=false` and passing `--apply` explicitly is safer.
 
 ## Commands
 
