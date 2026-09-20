@@ -1,0 +1,5 @@
+title: PagerDuty Auto-Ack
+description: A local CLI that acknowledges PagerDuty incidents only when the configured user is on call.
+theme: jekyll-theme-minimal
+show_downloads: false
+
