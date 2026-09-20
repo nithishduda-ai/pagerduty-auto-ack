@@ -54,6 +54,12 @@ After install, verify:
 pd-auto-ack --version
 ```
 
+Upgrade an existing install:
+
+```sh
+pipx upgrade pagerduty-auto-ack
+```
+
 For local development from this checkout:
 
 ```sh
@@ -80,7 +86,19 @@ python3 pagerduty_auto_ack.py --help
 
 ## Configure
 
-Create a local `.env` based on `.env.example` and fill in:
+Create a starter config file:
+
+```sh
+pd-auto-ack init --env-file ~/.pd-auto-ack.env
+```
+
+Then edit it:
+
+```sh
+nano ~/.pd-auto-ack.env
+```
+
+Fill in:
 
 ```sh
 PD_API_TOKEN=...
@@ -120,43 +138,43 @@ The CLI only acknowledges incidents when:
 Validate local configuration without calling PagerDuty:
 
 ```sh
-pd-auto-ack doctor --env-file .env
+pd-auto-ack doctor --env-file ~/.pd-auto-ack.env
 ```
 
 Validate PagerDuty API access and show current on-call/incident state without acknowledging anything:
 
 ```sh
-pd-auto-ack check --env-file .env
+pd-auto-ack check --env-file ~/.pd-auto-ack.env
 ```
 
 Dry-run is the default. It prints what would be acknowledged without changing PagerDuty:
 
 ```sh
-pd-auto-ack run --env-file .env --once
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --once
 ```
 
 Continuous dry-run polling:
 
 ```sh
-pd-auto-ack run --env-file .env --watch --interval 30
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30
 ```
 
 Run continuously and actually acknowledge matching incidents:
 
 ```sh
-pd-auto-ack run --env-file .env --watch --interval 30 --apply
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30 --apply
 ```
 
 Run once, useful from cron or another local scheduler:
 
 ```sh
-pd-auto-ack run --env-file .env --once --apply
+pd-auto-ack run --env-file ~/.pd-auto-ack.env --once --apply
 ```
 
 Example cron entry for once-per-minute local polling:
 
 ```cron
-* * * * * cd /Users/nithish/Documents/Pagerduty && /usr/bin/env pd-auto-ack run --env-file .env --once --apply >> pagerduty-auto-ack.log 2>&1
+* * * * * /usr/bin/env pd-auto-ack run --env-file ~/.pd-auto-ack.env --once --apply >> ~/pagerduty-auto-ack.log 2>&1
 ```
 
 ## Extra Safety Filters

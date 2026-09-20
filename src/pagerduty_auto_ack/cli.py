@@ -18,9 +18,33 @@ from typing import Any
 
 API_BASE_URL = "https://api.pagerduty.com"
 ACCEPT_HEADER = "application/vnd.pagerduty+json;version=2"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 USER_AGENT = f"pagerduty-auto-ack/{VERSION}"
-COMMANDS = {"run", "check", "doctor"}
+COMMANDS = {"init", "run", "check", "doctor"}
+ENV_TEMPLATE = """# PagerDuty Auto-Ack configuration
+# Keep this file private. It contains a PagerDuty API token.
+
+# Required. Use a PagerDuty REST API token.
+PD_API_TOKEN=REPLACE_WITH_PAGERDUTY_TOKEN
+
+# Optional but recommended. If omitted, the CLI will try to infer these from /users/me.
+PD_USER_ID=PAGERDUTY_USER_ID
+PD_FROM_EMAIL=you@example.com
+
+# Safe default. Keep false until dry-run output looks right.
+PD_APPLY=false
+PD_POLL_SECONDS=30
+
+# Optional comma-separated safety filters.
+PD_SERVICE_IDS=
+PD_TEAM_IDS=
+PD_ESCALATION_POLICY_IDS=
+PD_SCHEDULE_IDS=
+
+# Optional tuning.
+PD_REQUEST_TIMEOUT_SECONDS=20
+PD_MAX_PAGES=10
+"""
 
 
 class ConfigError(Exception):
@@ -94,6 +118,26 @@ def load_env_file(path: str | None) -> None:
             value = value.strip().strip('"').strip("'")
             if key and key not in os.environ:
                 os.environ[key] = value
+
+
+def create_env_file(path: str, *, force: bool = False) -> str:
+    expanded_path = os.path.expanduser(path)
+    if os.path.exists(expanded_path) and not force:
+        raise ConfigError(f"{expanded_path} already exists. Pass --force to overwrite it.")
+
+    directory = os.path.dirname(expanded_path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    fd = os.open(expanded_path, flags, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as env_file:
+        env_file.write(ENV_TEMPLATE)
+    try:
+        os.chmod(expanded_path, 0o600)
+    except OSError:
+        pass
+    return expanded_path
 
 
 def split_csv(value: str | None) -> list[str]:
@@ -443,6 +487,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version=f"%(prog)s {VERSION}")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    init_parser = subparsers.add_parser(
+        "init",
+        help="Create a starter env file.",
+        description="Create a starter env file for PagerDuty Auto-Ack.",
+    )
+    init_parser.add_argument("--env-file", default=os.getenv("PD_ENV_FILE", ".env"), help="Path to create. Defaults to .env.")
+    init_parser.add_argument("--force", action="store_true", help="Overwrite the env file if it already exists.")
+
     run_parser = subparsers.add_parser(
         "run",
         help="Poll PagerDuty and acknowledge matching triggered incidents.",
@@ -504,7 +556,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     pre_parser = argparse.ArgumentParser(add_help=False)
     pre_parser.add_argument("--env-file", default=os.getenv("PD_ENV_FILE", ".env"))
     pre_args, _ = pre_parser.parse_known_args(argv)
-    load_env_file(pre_args.env_file)
+    if argv[0] not in {"init", "-h", "--help", "--version"}:
+        load_env_file(pre_args.env_file)
 
     return build_parser().parse_args(argv)
 
@@ -574,10 +627,22 @@ def doctor_command(config: Config) -> int:
     return 0
 
 
+def init_command(env_file: str, *, force: bool = False) -> int:
+    path = create_env_file(env_file, force=force)
+    print(f"Created {path}")
+    print("Edit it, then run:")
+    print(f"  pd-auto-ack doctor --env-file {path}")
+    print(f"  pd-auto-ack check --env-file {path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     try:
         args = parse_args(argv)
+        if args.command == "init":
+            return init_command(args.env_file, force=args.force)
+
         config = build_config_from_args(args)
 
         if args.command == "run":

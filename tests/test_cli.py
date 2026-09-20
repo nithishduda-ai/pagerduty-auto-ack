@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import dataclasses
+import os
 import sys
+import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
@@ -104,6 +106,29 @@ class CliTests(unittest.TestCase):
             cli.normalize_argv(["--env-file", ".env", "--once"]),
             ["run", "--env-file", ".env", "--once"],
         )
+
+    def test_init_creates_private_env_file(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            env_path = os.path.join(temp_dir, "pd-auto-ack.env")
+
+            created_path = cli.create_env_file(env_path)
+
+            self.assertEqual(created_path, env_path)
+            with open(env_path, "r", encoding="utf-8") as env_file:
+                content = env_file.read()
+            self.assertIn("PD_API_TOKEN=REPLACE_WITH_PAGERDUTY_TOKEN", content)
+            self.assertEqual(os.stat(env_path).st_mode & 0o777, 0o600)
+
+    def test_init_refuses_to_overwrite_without_force(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            env_path = os.path.join(temp_dir, "pd-auto-ack.env")
+            cli.create_env_file(env_path)
+
+            with self.assertRaises(cli.ConfigError):
+                cli.create_env_file(env_path)
+
+            created_path = cli.create_env_file(env_path, force=True)
+            self.assertEqual(created_path, env_path)
 
 
 if __name__ == "__main__":
