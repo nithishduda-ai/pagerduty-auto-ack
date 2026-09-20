@@ -1,4 +1,4 @@
-# PagerDuty Auto-Ack
+# pd-auto-ack
 
 `pagerduty-auto-ack` installs the `pd-auto-ack` CLI, a small local tool that acknowledges PagerDuty incidents only when the configured user is currently on call.
 
@@ -33,4 +33,3 @@ New to `pipx`? Use the [quick start](quick-start.md) for macOS and Linux setup s
 
 - [GitHub repository](https://github.com/nithishduda-ai/pagerduty-auto-ack)
 - [PagerDuty API reference](https://developer.pagerduty.com/api-reference/)
-
