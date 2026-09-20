@@ -87,12 +87,14 @@ The PagerDuty token needs permissions equivalent to:
 ## Documentation
 
 - [Documentation site](https://nithishduda-ai.github.io/pagerduty-auto-ack/)
+- [Changelog](CHANGELOG.md)
 - [Quick start](docs/quick-start.md)
 - [Configuration](docs/configuration.md)
 - [Command reference](docs/commands.md)
 - [How it works](docs/how-it-works.md)
 - [Rollout, rate limits, and operations](docs/rollout.md)
 - [Local development](docs/development.md)
+- [Releasing](docs/releasing.md)
 
 ## Security
 
