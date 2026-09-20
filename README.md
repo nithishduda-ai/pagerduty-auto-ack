@@ -94,6 +94,10 @@ The PagerDuty token needs permissions equivalent to:
 - [Rollout, rate limits, and operations](docs/rollout.md)
 - [Local development](docs/development.md)
 
+## Security
+
+Please report suspected vulnerabilities through GitHub's private vulnerability reporting flow from the repository Security tab. See [SECURITY.md](SECURITY.md).
+
 ## Safety Summary
 
 The CLI only acknowledges incidents when all of these are true:
