@@ -53,7 +53,16 @@ class FakeClient:
                     "title": "Test incident",
                     "status": "triggered",
                     "assignments": [{"assignee": {"id": "PUSER"}}],
-                }
+                    "html_url": "https://example.pagerduty.com/incidents/PINCIDENT",
+                },
+                {
+                    "id": "PACKED",
+                    "incident_number": 43,
+                    "title": "Already acknowledged incident",
+                    "status": "acknowledged",
+                    "assignments": [{"assignee": {"id": "PUSER"}}],
+                    "html_url": "https://example.pagerduty.com/incidents/PACKED",
+                },
             ]
         raise AssertionError(f"Unexpected path: {path}")
 
@@ -100,6 +109,25 @@ class CliTests(unittest.TestCase):
 
         self.assertEqual(acknowledged, 1)
         self.assertEqual(fake_client.acknowledged, ["PINCIDENT"])
+
+    def test_open_incidents_include_triggered_and_acknowledged(self):
+        fake_client = FakeClient()
+        config = make_config()
+
+        incidents = cli.list_open_incidents(fake_client, config)
+
+        self.assertEqual(
+            [incident["status"] for incident in incidents],
+            ["triggered", "acknowledged"],
+        )
+
+    def test_triggered_incidents_exclude_already_acknowledged(self):
+        fake_client = FakeClient()
+        config = make_config()
+
+        incidents = cli.list_triggered_incidents(fake_client, config)
+
+        self.assertEqual([incident["id"] for incident in incidents], ["PINCIDENT"])
 
     def test_legacy_args_are_normalized_to_run_command(self):
         self.assertEqual(

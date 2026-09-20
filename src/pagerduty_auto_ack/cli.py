@@ -18,9 +18,10 @@ from typing import Any
 
 API_BASE_URL = "https://api.pagerduty.com"
 ACCEPT_HEADER = "application/vnd.pagerduty+json;version=2"
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 USER_AGENT = f"pagerduty-auto-ack/{VERSION}"
 COMMANDS = {"init", "run", "check", "doctor"}
+OPEN_INCIDENT_STATUSES = ("triggered", "acknowledged")
 ENV_TEMPLATE = """# PagerDuty Auto-Ack configuration
 # Keep this file private. It contains a PagerDuty API token.
 
@@ -388,23 +389,41 @@ def incident_is_assigned_to_user(incident: dict[str, Any], user_id: str) -> bool
     return False
 
 
-def list_triggered_incidents(client: PagerDutyClient, config: Config) -> list[dict[str, Any]]:
+def list_incidents(
+    client: PagerDutyClient,
+    config: Config,
+    *,
+    statuses: tuple[str, ...],
+) -> list[dict[str, Any]]:
     if not config.user_id:
         raise ConfigError("PD_USER_ID is required.")
 
     params = {
-        "statuses[]": ["triggered"],
+        "statuses[]": list(statuses),
         "user_ids[]": [config.user_id],
         "service_ids[]": config.service_ids,
         "team_ids[]": config.team_ids,
     }
     incidents = client.paginate("/incidents", "incidents", params=params)
+    allowed_statuses = set(statuses)
     return [
         incident
         for incident in incidents
-        if incident.get("status") == "triggered"
+        if incident.get("status") in allowed_statuses
         and incident_is_assigned_to_user(incident, config.user_id)
     ]
+
+
+def list_open_incidents(client: PagerDutyClient, config: Config) -> list[dict[str, Any]]:
+    return list_incidents(client, config, statuses=OPEN_INCIDENT_STATUSES)
+
+
+def list_triggered_incidents(client: PagerDutyClient, config: Config) -> list[dict[str, Any]]:
+    return list_incidents(client, config, statuses=("triggered",))
+
+
+def filter_triggered_incidents(incidents: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [incident for incident in incidents if incident.get("status") == "triggered"]
 
 
 def describe_oncall(oncall: dict[str, Any]) -> str:
@@ -415,13 +434,53 @@ def describe_oncall(oncall: dict[str, Any]) -> str:
     return " / ".join(parts) if parts else oncall.get("id", "unknown on-call")
 
 
-def describe_incident(incident: dict[str, Any]) -> str:
+def describe_incident(
+    incident: dict[str, Any],
+    *,
+    include_status: bool = False,
+    include_url: bool = False,
+) -> str:
     number = incident.get("incident_number")
     title = incident.get("title") or incident.get("summary") or "untitled"
     incident_id = incident.get("id", "unknown")
     if number:
-        return f"#{number} {title} ({incident_id})"
-    return f"{title} ({incident_id})"
+        description = f"#{number} {title} ({incident_id})"
+    else:
+        description = f"{title} ({incident_id})"
+
+    status = incident.get("status")
+    if include_status and status:
+        description = f"{description} [{status}]"
+
+    url = incident.get("html_url")
+    if include_url and url:
+        description = f"{description} {url}"
+
+    return description
+
+
+def log_incidents(config: Config, heading: str, incidents: list[dict[str, Any]]) -> None:
+    log(config, f"{heading}: {len(incidents)}")
+    for incident in incidents:
+        log(config, f"- {describe_incident(incident, include_status=True, include_url=True)}")
+
+
+def print_incidents(heading: str, incidents: list[dict[str, Any]]) -> None:
+    print(f"{heading}: {len(incidents)}")
+    for incident in incidents:
+        print(f"- {describe_incident(incident, include_status=True, include_url=True)}")
+
+
+def print_triggered_summary(incidents: list[dict[str, Any]]) -> None:
+    print(f"Triggered incidents eligible for acknowledgement: {len(incidents)}")
+    for incident in incidents:
+        print(f"- {describe_incident(incident, include_status=True, include_url=True)}")
+
+
+def log_triggered_summary(config: Config, incidents: list[dict[str, Any]]) -> None:
+    log(config, f"Triggered incidents eligible for acknowledgement: {len(incidents)}")
+    for incident in incidents:
+        log(config, f"- {describe_incident(incident, include_status=True, include_url=True)}")
 
 
 def run_once(client: PagerDutyClient, config: Config) -> int:
@@ -434,13 +493,17 @@ def run_once(client: PagerDutyClient, config: Config) -> int:
     oncall_summary = "; ".join(describe_oncall(oncall) for oncall in active_oncalls)
     log(config, f"User is on call: {oncall_summary}")
 
-    incidents = list_triggered_incidents(client, config)
-    if not incidents:
-        log(config, "No triggered incidents assigned to the user.")
+    open_incidents = list_open_incidents(client, config)
+    log_incidents(config, "Open incidents assigned to user", open_incidents)
+
+    triggered_incidents = filter_triggered_incidents(open_incidents)
+    if not triggered_incidents:
+        log(config, "No triggered incidents eligible for acknowledgement.")
         return 0
 
     acknowledged = 0
-    for incident in incidents:
+    log_triggered_summary(config, triggered_incidents)
+    for incident in triggered_incidents:
         incident_id = incident.get("id")
         if not incident_id:
             log(config, f"Skipping incident without an id: {incident}")
@@ -602,10 +665,9 @@ def check_command(config: Config) -> int:
     else:
         print("On call now: no")
 
-    incidents = list_triggered_incidents(client, config)
-    print(f"Triggered incidents assigned to user: {len(incidents)}")
-    for incident in incidents:
-        print(f"- {describe_incident(incident)}")
+    open_incidents = list_open_incidents(client, config)
+    print_incidents("Open incidents assigned to user", open_incidents)
+    print_triggered_summary(filter_triggered_incidents(open_incidents))
 
     if config.team_ids:
         client.test_ability("teams")

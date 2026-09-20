@@ -6,10 +6,11 @@ Every poll cycle follows this decision flow:
 2. Resolve the PagerDuty user from `PD_USER_ID` or `/users/me`.
 3. Call `GET /oncalls` for that user at the current time.
 4. Stop immediately if the user is not currently on call.
-5. Call `GET /incidents` for incidents assigned to that user with `statuses[]=triggered`.
-6. Stop if there are no matching triggered incidents.
-7. In dry-run mode, print what would be acknowledged.
-8. In live mode, call `PUT /incidents/{id}` with `status: acknowledged`.
+5. Call `GET /incidents` for open incidents assigned to that user with `statuses[]=triggered` and `statuses[]=acknowledged`.
+6. Display the open incident list.
+7. Stop if there are no matching triggered incidents.
+8. In dry-run mode, print what would be acknowledged.
+9. In live mode, call `PUT /incidents/{id}` with `status: acknowledged`.
 
 The CLI only acknowledges incidents when:
 
@@ -18,6 +19,12 @@ The CLI only acknowledges incidents when:
 - the incident is assigned to that user
 
 The CLI does not acknowledge incidents assigned to someone else. It does not acknowledge already acknowledged incidents. It does not resolve incidents, reassign incidents, edit titles, or add notes.
+
+## Open vs Triggered
+
+For display, open incidents means incidents with PagerDuty status `triggered` or `acknowledged`.
+
+For action, only `triggered` incidents are eligible for acknowledgement. Already `acknowledged` incidents are shown for operator awareness but are not updated.
 
 ## Dry-Run vs Live Mode
 

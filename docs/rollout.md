@@ -21,7 +21,7 @@ With the default 30 second interval, that is approximately:
 - On call, no incidents: 4 calls per minute per running user.
 - On call, live mode with new incidents: 4 calls per minute plus one write call for each incident acknowledged.
 
-List calls are paginated with `limit=100`. If PagerDuty returns more pages, the CLI will make additional page requests up to `PD_MAX_PAGES`, which defaults to `10`.
+The incident list call requests open incidents using `statuses[]=triggered` and `statuses[]=acknowledged`, but write calls are made only for triggered incidents. List calls are paginated with `limit=100`. If PagerDuty returns more pages, the CLI will make additional page requests up to `PD_MAX_PAGES`, which defaults to `10`.
 
 For a team rollout, total call volume scales linearly with the number of people running the tool. For example, 50 people running at a 30 second interval while not on call is about 100 PagerDuty API calls per minute. If 5 of those people are on call, add about 10 more calls per minute for incident checks.
 

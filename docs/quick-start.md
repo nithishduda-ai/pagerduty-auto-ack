@@ -78,10 +78,11 @@ Example healthy output:
 ```text
 PagerDuty API token is valid for user@example.com.
 On call now: EU Support Escalation Policy / EU Support Escalation / level 1
-Triggered incidents assigned to user: 0
+Open incidents assigned to user: 0
+Triggered incidents eligible for acknowledgement: 0
 ```
 
-That means the token works, the CLI identified the PagerDuty user, the user is currently on call, and there are no triggered incidents assigned to them right now.
+That means the token works, the CLI identified the PagerDuty user, the user is currently on call, and there are no open incidents assigned to them right now.
 
 ## Run
 

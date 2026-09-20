@@ -53,7 +53,8 @@ What it does:
 - Calls PagerDuty to validate the API token.
 - Resolves the configured user.
 - Shows whether the user is currently on call.
-- Lists the count of currently triggered incidents assigned to that user.
+- Lists open incidents assigned to that user.
+- Separately shows which triggered incidents are eligible for acknowledgement.
 - Does not acknowledge anything.
 
 Use this after `doctor` and before `run`.
@@ -84,7 +85,9 @@ What it does:
 
 - Checks whether the configured user is on call.
 - If the user is not on call, exits or waits for the next poll.
-- If the user is on call, looks for `triggered` incidents assigned to that user.
+- If the user is on call, displays open incidents assigned to that user.
+- Treats `triggered` incidents as eligible for acknowledgement.
+- Treats already `acknowledged` incidents as visible but not eligible for acknowledgement.
 - In dry-run mode, prints what it would acknowledge.
 - In live mode with `--apply`, acknowledges matching incidents.
 

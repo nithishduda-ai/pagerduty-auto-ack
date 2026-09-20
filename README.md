@@ -5,8 +5,8 @@
 It is intentionally narrow:
 
 - Checks whether the user is on call.
-- Finds only `triggered` incidents assigned to that user.
-- Acknowledges those incidents.
+- Displays open incidents assigned to that user.
+- Acknowledges only `triggered` incidents.
 - Does not resolve, reassign, rename, or add notes to incidents.
 
 ## Install
