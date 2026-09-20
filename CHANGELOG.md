@@ -2,6 +2,13 @@
 
 All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
+## Unreleased
+
+### Added
+
+- Added GitHub Actions workflow for TestPyPI and PyPI publishing with Trusted Publishing.
+- Added PyPI publishing setup documentation.
+
 ## 0.4.0 - 2026-09-20
 
 ### Changed

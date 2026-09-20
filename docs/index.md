@@ -11,6 +11,7 @@
 - [Rollout, rate limits, and operations](rollout.md)
 - [Local development](development.md)
 - [Changelog](https://github.com/nithishduda-ai/pagerduty-oncall-ack/blob/main/CHANGELOG.md)
+- [PyPI publishing](pypi-publishing.md)
 - [Releasing](releasing.md)
 
 ## What It Does

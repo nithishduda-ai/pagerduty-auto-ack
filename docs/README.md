@@ -9,4 +9,5 @@ Use this directory for detailed docs. Keep the root `README.md` short and useful
 - [Rollout, rate limits, and operations](rollout.md)
 - [Local development](development.md)
 - [Changelog](https://github.com/nithishduda-ai/pagerduty-oncall-ack/blob/main/CHANGELOG.md)
+- [PyPI publishing](pypi-publishing.md)
 - [Releasing](releasing.md)

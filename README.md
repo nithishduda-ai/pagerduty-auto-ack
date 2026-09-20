@@ -103,6 +103,7 @@ The PagerDuty token needs permissions equivalent to:
 - [How it works](docs/how-it-works.md)
 - [Rollout, rate limits, and operations](docs/rollout.md)
 - [Local development](docs/development.md)
+- [PyPI publishing](docs/pypi-publishing.md)
 - [Releasing](docs/releasing.md)
 
 ## Security
