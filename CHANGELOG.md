@@ -7,6 +7,7 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 ### Changed
 
 - Renamed the project and install package from `pagerduty-auto-ack` to `pagerduty-oncall-ack`.
+- The rename avoids confusion with the existing `pagerduty-auto-ack` project name already published on PyPI by another maintainer.
 - Renamed the primary Python import package from `pagerduty_auto_ack` to `pagerduty_oncall_ack`.
 - Kept the CLI command as `pd-auto-ack`.
 - Updated repository, documentation, GitHub Pages, and release links for the new project name.

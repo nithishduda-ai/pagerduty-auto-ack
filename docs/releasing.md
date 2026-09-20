@@ -7,23 +7,24 @@ Use this checklist for every public release.
 1. Update the version in `pyproject.toml`.
 2. Update `VERSION` in `src/pagerduty_oncall_ack/cli.py`.
 3. Update `CHANGELOG.md` with user-facing changes.
-4. Run local checks:
+4. Before publishing to a package registry, confirm the package name is available and does not conflict with an existing project.
+5. Run local checks:
 
    ```sh
    python3 -m unittest discover -s tests
    python3 -m compileall -q src pagerduty_auto_ack.py tests
    ```
 
-5. Commit and push the release changes.
-6. Tag the release:
+6. Commit and push the release changes.
+7. Tag the release:
 
    ```sh
    git tag vX.Y.Z
    git push origin vX.Y.Z
    ```
 
-7. Create a GitHub Release using the matching changelog entry.
-8. Confirm GitHub CI, CodeQL, Pages, and Dependabot jobs pass.
+8. Create a GitHub Release using the matching changelog entry.
+9. Confirm GitHub CI, CodeQL, Pages, and Dependabot jobs pass.
 
 ## Release Notes
 
