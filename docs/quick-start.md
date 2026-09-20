@@ -23,15 +23,24 @@ exec "$SHELL" -l
 Install from GitHub:
 
 ```sh
-pipx install git+https://github.com/nithishduda-ai/pagerduty-auto-ack.git
+pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
 pd-auto-ack --version
 ```
 
 Upgrade:
 
 ```sh
-pipx upgrade pagerduty-auto-ack
+pipx upgrade pagerduty-oncall-ack
 ```
+
+If you installed an older release when the package was named `pagerduty-auto-ack`, reinstall once under the new package name:
+
+```sh
+pipx uninstall pagerduty-auto-ack
+pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+```
+
+The CLI command remains `pd-auto-ack`.
 
 ## Create Config
 

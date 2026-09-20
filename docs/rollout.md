@@ -44,5 +44,5 @@ Reference: <https://support.pagerduty.com/main/docs/rest-api-rate-limits>
 Run once per minute in live mode:
 
 ```cron
-* * * * * /usr/bin/env pd-auto-ack run --env-file ~/.pd-auto-ack.env --once --apply >> ~/pagerduty-auto-ack.log 2>&1
+* * * * * /usr/bin/env pd-auto-ack run --env-file ~/.pd-auto-ack.env --once --apply >> ~/pagerduty-oncall-ack.log 2>&1
 ```

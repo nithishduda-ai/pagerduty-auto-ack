@@ -15,10 +15,10 @@ pipx install .
 Run without installing:
 
 ```sh
-PYTHONPATH=src python3 -m pagerduty_auto_ack --help
+PYTHONPATH=src python3 -m pagerduty_oncall_ack --help
 ```
 
-Compatibility wrapper:
+Backward-compatible script wrapper:
 
 ```sh
 python3 pagerduty_auto_ack.py --help
@@ -35,5 +35,5 @@ PYTHONPATH=src python3 -m unittest discover -s tests
 Compile-check:
 
 ```sh
-PYTHONPYCACHEPREFIX=/private/tmp/pagerduty-pycache python3 -m py_compile pagerduty_auto_ack.py src/pagerduty_auto_ack/*.py tests/*.py
+PYTHONPYCACHEPREFIX=/private/tmp/pagerduty-pycache python3 -m py_compile pagerduty_auto_ack.py src/pagerduty_oncall_ack/*.py src/pagerduty_auto_ack/*.py tests/*.py
 ```

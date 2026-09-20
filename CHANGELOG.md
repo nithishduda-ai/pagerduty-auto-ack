@@ -1,10 +1,34 @@
 # Changelog
 
-All notable user-facing changes to `pagerduty-auto-ack` are documented here.
+All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
+
+## 0.4.0 - 2026-09-20
+
+### Changed
+
+- Renamed the project and install package from `pagerduty-auto-ack` to `pagerduty-oncall-ack`.
+- Renamed the primary Python import package from `pagerduty_auto_ack` to `pagerduty_oncall_ack`.
+- Kept the CLI command as `pd-auto-ack`.
+- Updated repository, documentation, GitHub Pages, and release links for the new project name.
+
+### Compatibility
+
+- Kept `pagerduty_auto_ack` as a compatibility import wrapper.
+- Kept `pagerduty_auto_ack.py` as a compatibility script wrapper.
+- Existing `pd-auto-ack` env files continue to work.
+
+### Upgrade Notes
+
+- Users who installed the older GitHub package name should reinstall once:
+
+  ```sh
+  pipx uninstall pagerduty-auto-ack
+  pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+  ```
 
 ## 0.3.0 - 2026-09-20
 
-First published release.
+First published release under the previous `pagerduty-auto-ack` project name.
 
 ### Added
 
@@ -32,4 +56,3 @@ First published release.
 - Added quick start, configuration, command reference, rollout, and development guides.
 - Added API call volume and rate limit guidance for team rollouts.
 - Added first-time `pipx` installation instructions for macOS and Linux.
-

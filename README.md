@@ -1,6 +1,6 @@
-# PagerDuty Auto-Ack
+# PagerDuty On-Call Ack
 
-`pagerduty-auto-ack` installs the `pd-auto-ack` CLI. It acknowledges PagerDuty incidents only when the configured user is currently on call.
+`pagerduty-oncall-ack` installs the `pd-auto-ack` CLI. It acknowledges PagerDuty incidents only when the configured user is currently on call.
 
 It is intentionally narrow:
 
@@ -32,15 +32,24 @@ exec "$SHELL" -l
 Install the CLI:
 
 ```sh
-pipx install git+https://github.com/nithishduda-ai/pagerduty-auto-ack.git
+pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
 pd-auto-ack --version
 ```
 
 Upgrade an existing install:
 
 ```sh
-pipx upgrade pagerduty-auto-ack
+pipx upgrade pagerduty-oncall-ack
 ```
+
+If you installed an older release when the package was named `pagerduty-auto-ack`, reinstall once under the new package name:
+
+```sh
+pipx uninstall pagerduty-auto-ack
+pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+```
+
+The CLI command remains `pd-auto-ack`.
 
 ## Quick Start
 
@@ -86,7 +95,7 @@ The PagerDuty token needs permissions equivalent to:
 
 ## Documentation
 
-- [Documentation site](https://nithishduda-ai.github.io/pagerduty-auto-ack/)
+- [Documentation site](https://nithishduda-ai.github.io/pagerduty-oncall-ack/)
 - [Changelog](CHANGELOG.md)
 - [Quick start](docs/quick-start.md)
 - [Configuration](docs/configuration.md)

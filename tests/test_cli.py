@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from pagerduty_auto_ack import cli
+from pagerduty_oncall_ack import cli
 
 
 def make_config(**overrides):

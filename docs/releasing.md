@@ -5,7 +5,7 @@ Use this checklist for every public release.
 ## Release Checklist
 
 1. Update the version in `pyproject.toml`.
-2. Update `VERSION` in `src/pagerduty_auto_ack/cli.py`.
+2. Update `VERSION` in `src/pagerduty_oncall_ack/cli.py`.
 3. Update `CHANGELOG.md` with user-facing changes.
 4. Run local checks:
 
@@ -36,4 +36,3 @@ Release notes should tell users:
 - whether any safety behavior changed
 
 For this project, always call out acknowledgement behavior explicitly. Users should never have to guess what the CLI will update in PagerDuty.
-

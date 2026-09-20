@@ -1,10 +1,10 @@
-"""Run the CLI with `python -m pagerduty_auto_ack`."""
+"""Run the CLI with `python -m pagerduty_oncall_ack`."""
 
 from __future__ import annotations
 
 import sys
 
-from pagerduty_oncall_ack.cli import main
+from .cli import main
 
 
 if __name__ == "__main__":
