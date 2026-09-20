@@ -16,19 +16,33 @@ The endpoint behavior was checked against PagerDuty's official API reference and
 
 ## Install
 
-From this checkout:
+Recommended install uses `pipx`, which keeps CLI tools in isolated Python environments.
+
+If `pipx` is not installed yet, install it first.
+
+macOS with Homebrew:
 
 ```sh
-python3 -m pip install .
+brew install pipx
+pipx ensurepath
+exec zsh -l
 ```
 
-Or with `pipx`:
+Linux:
 
 ```sh
-pipx install .
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+exec "$SHELL" -l
 ```
 
-From GitHub:
+Verify `pipx`:
+
+```sh
+pipx --version
+```
+
+Install from GitHub:
 
 ```sh
 pipx install git+https://github.com/nithishduda-ai/pagerduty-auto-ack.git
@@ -38,6 +52,18 @@ After install, verify:
 
 ```sh
 pd-auto-ack --version
+```
+
+For local development from this checkout:
+
+```sh
+python3 -m pip install .
+```
+
+Or with `pipx`:
+
+```sh
+pipx install .
 ```
 
 You can also run from a checkout without installing:
