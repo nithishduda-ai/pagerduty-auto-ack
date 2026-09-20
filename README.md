@@ -60,6 +60,8 @@ Create a local `.env` based on `.env.example` and fill in:
 PD_API_TOKEN=...
 PD_USER_ID=...
 PD_FROM_EMAIL=...
+PD_APPLY=false
+PD_POLL_SECONDS=30
 ```
 
 The token needs permissions equivalent to:
@@ -68,7 +70,24 @@ The token needs permissions equivalent to:
 - `incidents.read`
 - `incidents.write`
 
+Required values:
+
+- `PD_API_TOKEN`: PagerDuty REST API token.
+- `PD_USER_ID`: PagerDuty user ID for the person who should be checked as on call.
+- `PD_FROM_EMAIL`: Email of a valid PagerDuty user. PagerDuty requires this when updating incidents.
+
+Recommended values:
+
+- `PD_APPLY=false`: keeps the tool in dry-run mode by default.
+- `PD_POLL_SECONDS=30`: polling interval for `--watch` mode.
+
 `PD_FROM_EMAIL` must be a valid PagerDuty user email for the account because PagerDuty requires the `From` header when updating incidents.
+
+The CLI only acknowledges incidents when:
+
+- the configured user is currently on call
+- the incident is `triggered`
+- the incident is assigned to that user
 
 ## Commands
 
@@ -132,7 +151,7 @@ The script still requires the configured user to be actively on call before it l
 Run tests:
 
 ```sh
-PYTHONPATH=src python3 -m unittest
+PYTHONPATH=src python3 -m unittest discover -s tests
 ```
 
 Compile-check the package:
