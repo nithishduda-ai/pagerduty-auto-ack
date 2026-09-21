@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pagerduty-oncall-ack"
-version = "0.4.0"
+version = "0.4.1"
 description = "Acknowledge PagerDuty incidents only while the configured user is on call."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -32,9 +32,12 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/nithishduda-ai/pagerduty-oncall-ack"
+Homepage = "https://nithishduda-ai.github.io/pagerduty-oncall-ack/"
+Documentation = "https://nithishduda-ai.github.io/pagerduty-oncall-ack/"
 Repository = "https://github.com/nithishduda-ai/pagerduty-oncall-ack"
 Issues = "https://github.com/nithishduda-ai/pagerduty-oncall-ack/issues"
+Changelog = "https://github.com/nithishduda-ai/pagerduty-oncall-ack/blob/main/CHANGELOG.md"
+Security = "https://github.com/nithishduda-ai/pagerduty-oncall-ack/security/policy"
 
 [project.scripts]
 pd-auto-ack = "pagerduty_oncall_ack.cli:main"

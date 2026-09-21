@@ -4,10 +4,13 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
 ## Unreleased
 
+## 0.4.1 - 2026-09-21
+
 ### Changed
 
 - Updated install docs to use the published PyPI package.
 - Removed maintainer-only publishing and release pages from the public documentation site.
+- Updated PyPI project links to point users to documentation, changelog, issue reporting, and the security policy.
 
 ## 0.4.0 - 2026-09-20
 
