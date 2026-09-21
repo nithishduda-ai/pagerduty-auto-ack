@@ -22,12 +22,12 @@ In both TestPyPI and PyPI, configure a pending Trusted Publisher for this projec
 
 The environment names must match the GitHub Actions workflow.
 
-In GitHub repository settings, create environments named:
+Confirm the GitHub repository has environments named:
 
 - `testpypi`
 - `pypi`
 
-For the `pypi` environment, require manual approval before deployment.
+For the `pypi` environment, require manual approval before deployment so a real PyPI release cannot happen by accident.
 
 ## Publish To TestPyPI
 
