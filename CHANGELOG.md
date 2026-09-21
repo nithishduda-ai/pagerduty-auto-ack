@@ -4,6 +4,11 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
 ## Unreleased
 
+### Added
+
+- Added a Homebrew tap for macOS and Linux installation, including terminal dashboard support.
+- Added Homebrew install, upgrade, uninstall, and troubleshooting documentation.
+
 ## 0.5.0 - 2026-09-21
 
 ### Added

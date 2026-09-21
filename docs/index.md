@@ -5,6 +5,7 @@
 ## Start Here
 
 - [Quick start](quick-start.md)
+- [Homebrew install and upgrades](homebrew.md)
 - [Configuration](configuration.md)
 - [Command reference](commands.md)
 - [How it works](how-it-works.md)
@@ -23,6 +24,17 @@
 Dry-run mode is the default. Live acknowledgement requires `--apply` or `PD_APPLY=true`.
 
 ## Install
+
+Homebrew on macOS or Linux:
+
+```sh
+brew install nithishduda-ai/tap/pagerduty-oncall-ack
+pd-auto-ack --version
+```
+
+The Homebrew package includes the terminal dashboard. See the [Homebrew guide](homebrew.md) for upgrades and uninstall instructions.
+
+Using `pipx` instead:
 
 ```sh
 pipx install pagerduty-oncall-ack

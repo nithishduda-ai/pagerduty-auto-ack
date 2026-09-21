@@ -2,7 +2,20 @@
 
 ## Install
 
-Recommended install uses `pipx`.
+### Homebrew
+
+On macOS or Linux with Homebrew installed:
+
+```sh
+brew install nithishduda-ai/tap/pagerduty-oncall-ack
+pd-auto-ack --version
+```
+
+This installation includes the optional terminal dashboard. See the [Homebrew guide](homebrew.md) for upgrade, uninstall, and troubleshooting steps.
+
+### pipx
+
+Use `pipx` when Homebrew is unavailable or when you prefer a Python-managed installation.
 
 macOS with Homebrew:
 
@@ -40,7 +53,7 @@ For an existing `pipx` install:
 pipx inject pagerduty-oncall-ack textual
 ```
 
-Upgrade:
+Upgrade a `pipx` installation:
 
 ```sh
 pipx upgrade pagerduty-oncall-ack

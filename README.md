@@ -11,7 +11,18 @@ It is intentionally narrow:
 
 ## Install
 
-Recommended install uses `pipx`, which keeps CLI tools in isolated Python environments.
+### Homebrew (macOS and Linux)
+
+```sh
+brew install nithishduda-ai/tap/pagerduty-oncall-ack
+pd-auto-ack --version
+```
+
+The Homebrew package includes the optional terminal dashboard. See the [Homebrew guide](docs/homebrew.md) for upgrade, uninstall, and troubleshooting steps.
+
+### pipx (macOS and Linux)
+
+`pipx` keeps CLI tools in isolated Python environments.
 
 macOS with Homebrew:
 
@@ -118,6 +129,7 @@ The PagerDuty token needs permissions equivalent to:
 - [PyPI package](https://pypi.org/project/pagerduty-oncall-ack/)
 - [Changelog](CHANGELOG.md)
 - [Quick start](docs/quick-start.md)
+- [Homebrew install and upgrades](docs/homebrew.md)
 - [Configuration](docs/configuration.md)
 - [Command reference](docs/commands.md)
 - [How it works](docs/how-it-works.md)

@@ -3,6 +3,7 @@
 Use this directory for detailed docs. Keep the root `README.md` short and useful for first-time visitors.
 
 - [Quick start](quick-start.md)
+- [Homebrew install and upgrades](homebrew.md)
 - [Configuration](configuration.md)
 - [Command reference](commands.md)
 - [How it works](how-it-works.md)
