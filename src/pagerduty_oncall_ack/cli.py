@@ -18,7 +18,7 @@ from typing import Any
 
 API_BASE_URL = "https://api.pagerduty.com"
 ACCEPT_HEADER = "application/vnd.pagerduty+json;version=2"
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 USER_AGENT = f"pagerduty-oncall-ack/{VERSION}"
 COMMANDS = {"init", "run", "check", "doctor", "tui"}
 OPEN_INCIDENT_STATUSES = ("triggered", "acknowledged")
