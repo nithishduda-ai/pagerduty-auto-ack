@@ -38,7 +38,7 @@ jobs:
         run: python -m unittest discover -s tests
 
       - name: Compile-check source
-        run: python -m compileall -q src pagerduty_auto_ack.py tests
+        run: python -m compileall -q src tests
 
       - name: Build package distributions
         run: python -m build

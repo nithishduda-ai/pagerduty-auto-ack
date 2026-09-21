@@ -9,6 +9,10 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 - Added a Homebrew tap for macOS and Linux installation, including terminal dashboard support.
 - Added Homebrew install, upgrade, uninstall, and troubleshooting documentation.
 
+### Removed
+
+- Removed legacy compatibility wrappers from the source distribution.
+
 ## 0.5.0 - 2026-09-21
 
 ### Added
@@ -27,30 +31,15 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
 ### Changed
 
-- Renamed the project and install package from `pagerduty-auto-ack` to `pagerduty-oncall-ack`.
-- The rename avoids confusion with the existing `pagerduty-auto-ack` project name already published on PyPI by another maintainer.
-- Renamed the primary Python import package from `pagerduty_auto_ack` to `pagerduty_oncall_ack`.
+- Standardized the project and install package name as `pagerduty-oncall-ack`.
+- Standardized the Python import package as `pagerduty_oncall_ack`.
 - Kept the CLI command as `pd-auto-ack`.
 - Updated repository, documentation, GitHub Pages, and release links for the new project name.
-
-### Compatibility
-
-- Kept `pagerduty_auto_ack` as a compatibility import wrapper.
-- Kept `pagerduty_auto_ack.py` as a compatibility script wrapper.
 - Existing `pd-auto-ack` env files continue to work.
-
-### Upgrade Notes
-
-- Users who installed the older GitHub package name should reinstall once:
-
-  ```sh
-  pipx uninstall pagerduty-auto-ack
-  pipx install pagerduty-oncall-ack
-  ```
 
 ## 0.3.0 - 2026-09-20
 
-First published release under the previous `pagerduty-auto-ack` project name.
+First published CLI release.
 
 ### Added
 

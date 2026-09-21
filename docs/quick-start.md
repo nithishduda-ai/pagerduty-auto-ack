@@ -59,14 +59,7 @@ Upgrade a `pipx` installation:
 pipx upgrade pagerduty-oncall-ack
 ```
 
-If you installed an older release when the package was named `pagerduty-auto-ack`, reinstall once under the new package name:
-
-```sh
-pipx uninstall pagerduty-auto-ack
-pipx install pagerduty-oncall-ack
-```
-
-The CLI command remains `pd-auto-ack`.
+The installed CLI command is `pd-auto-ack`.
 
 ## Create Config
 
