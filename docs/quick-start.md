@@ -20,10 +20,10 @@ python3 -m pipx ensurepath
 exec "$SHELL" -l
 ```
 
-Install from GitHub:
+Install from PyPI:
 
 ```sh
-pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+pipx install pagerduty-oncall-ack
 pd-auto-ack --version
 ```
 
@@ -37,7 +37,7 @@ If you installed an older release when the package was named `pagerduty-auto-ack
 
 ```sh
 pipx uninstall pagerduty-auto-ack
-pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+pipx install pagerduty-oncall-ack
 ```
 
 The CLI command remains `pd-auto-ack`.

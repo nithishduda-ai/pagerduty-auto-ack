@@ -4,10 +4,10 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
 ## Unreleased
 
-### Added
+### Changed
 
-- Added GitHub Actions workflow for TestPyPI and PyPI publishing with Trusted Publishing.
-- Added PyPI publishing setup documentation.
+- Updated install docs to use the published PyPI package.
+- Removed maintainer-only publishing and release pages from the public documentation site.
 
 ## 0.4.0 - 2026-09-20
 
@@ -31,7 +31,7 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
   ```sh
   pipx uninstall pagerduty-auto-ack
-  pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+  pipx install pagerduty-oncall-ack
   ```
 
 ## 0.3.0 - 2026-09-20

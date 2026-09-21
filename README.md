@@ -32,7 +32,7 @@ exec "$SHELL" -l
 Install the CLI:
 
 ```sh
-pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+pipx install pagerduty-oncall-ack
 pd-auto-ack --version
 ```
 
@@ -46,7 +46,7 @@ If you installed an older release when the package was named `pagerduty-auto-ack
 
 ```sh
 pipx uninstall pagerduty-auto-ack
-pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+pipx install pagerduty-oncall-ack
 ```
 
 The CLI command remains `pd-auto-ack`.
@@ -96,6 +96,7 @@ The PagerDuty token needs permissions equivalent to:
 ## Documentation
 
 - [Documentation site](https://nithishduda-ai.github.io/pagerduty-oncall-ack/)
+- [PyPI package](https://pypi.org/project/pagerduty-oncall-ack/)
 - [Changelog](CHANGELOG.md)
 - [Quick start](docs/quick-start.md)
 - [Configuration](docs/configuration.md)
@@ -103,8 +104,6 @@ The PagerDuty token needs permissions equivalent to:
 - [How it works](docs/how-it-works.md)
 - [Rollout, rate limits, and operations](docs/rollout.md)
 - [Local development](docs/development.md)
-- [PyPI publishing](docs/pypi-publishing.md)
-- [Releasing](docs/releasing.md)
 
 ## Security
 

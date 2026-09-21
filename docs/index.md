@@ -11,8 +11,6 @@
 - [Rollout, rate limits, and operations](rollout.md)
 - [Local development](development.md)
 - [Changelog](https://github.com/nithishduda-ai/pagerduty-oncall-ack/blob/main/CHANGELOG.md)
-- [PyPI publishing](pypi-publishing.md)
-- [Releasing](releasing.md)
 
 ## What It Does
 
@@ -26,7 +24,7 @@ Dry-run mode is the default. Live acknowledgement requires `--apply` or `PD_APPL
 ## Install
 
 ```sh
-pipx install git+https://github.com/nithishduda-ai/pagerduty-oncall-ack.git
+pipx install pagerduty-oncall-ack
 pd-auto-ack --version
 ```
 
@@ -35,4 +33,5 @@ New to `pipx`? Use the [quick start](quick-start.md) for macOS and Linux setup s
 ## Repository
 
 - [GitHub repository](https://github.com/nithishduda-ai/pagerduty-oncall-ack)
+- [PyPI package](https://pypi.org/project/pagerduty-oncall-ack/)
 - [PagerDuty API reference](https://developer.pagerduty.com/api-reference/)
