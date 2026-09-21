@@ -42,3 +42,9 @@ pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30 --apply
 ```
 
 You can also set `PD_APPLY=true` in the env file, but leaving `PD_APPLY=false` and passing `--apply` explicitly is safer.
+
+## Terminal Dashboard
+
+`pd-auto-ack tui` uses the same decision flow as `run`, but displays it in an interactive terminal dashboard.
+
+The dashboard refreshes on the configured interval, shows open incidents and selected incident details, and starts in dry-run mode unless live mode is explicitly enabled with `--apply` or `PD_APPLY=true`.

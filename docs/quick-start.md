@@ -27,6 +27,19 @@ pipx install pagerduty-oncall-ack
 pd-auto-ack --version
 ```
 
+Install with the optional terminal dashboard:
+
+```sh
+pipx install "pagerduty-oncall-ack[tui]"
+pd-auto-ack tui --env-file ~/.pd-auto-ack.env
+```
+
+For an existing `pipx` install:
+
+```sh
+pipx inject pagerduty-oncall-ack textual
+```
+
 Upgrade:
 
 ```sh
@@ -111,4 +124,10 @@ Continuous live mode:
 
 ```sh
 pd-auto-ack run --env-file ~/.pd-auto-ack.env --watch --interval 30 --apply
+```
+
+Optional terminal dashboard:
+
+```sh
+pd-auto-ack tui --env-file ~/.pd-auto-ack.env
 ```

@@ -135,6 +135,18 @@ class CliTests(unittest.TestCase):
             ["run", "--env-file", ".env", "--once"],
         )
 
+    def test_tui_command_is_explicit(self):
+        self.assertIn("tui", cli.COMMANDS)
+        self.assertEqual(cli.normalize_argv(["tui", "--env-file", ".env"]), ["tui", "--env-file", ".env"])
+
+    def test_tui_rejects_non_interactive_terminal(self):
+        config = make_config()
+
+        with self.assertRaises(cli.ConfigError) as context:
+            cli.tui_command(config)
+
+        self.assertIn("interactive terminal", str(context.exception))
+
     def test_init_creates_private_env_file(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             env_path = os.path.join(temp_dir, "pd-auto-ack.env")

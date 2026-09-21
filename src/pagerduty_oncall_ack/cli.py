@@ -18,9 +18,9 @@ from typing import Any
 
 API_BASE_URL = "https://api.pagerduty.com"
 ACCEPT_HEADER = "application/vnd.pagerduty+json;version=2"
-VERSION = "0.4.1"
+VERSION = "0.5.0"
 USER_AGENT = f"pagerduty-oncall-ack/{VERSION}"
-COMMANDS = {"init", "run", "check", "doctor"}
+COMMANDS = {"init", "run", "check", "doctor", "tui"}
 OPEN_INCIDENT_STATUSES = ("triggered", "acknowledged")
 ENV_TEMPLATE = """# PagerDuty On-Call Ack configuration
 # Keep this file private. It contains a PagerDuty API token.
@@ -570,6 +570,16 @@ def build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--dry-run", action="store_true", help="Force dry-run mode even if PD_APPLY=true.")
     run_parser.add_argument("--interval", type=int, default=env_int("PD_POLL_SECONDS", 30), help="Polling interval in seconds for --watch.")
 
+    tui_parser = subparsers.add_parser(
+        "tui",
+        help="Open an interactive terminal dashboard.",
+        description="Open a k9s-style terminal dashboard for PagerDuty On-Call Ack.",
+    )
+    add_common_arguments(tui_parser)
+    tui_parser.add_argument("--apply", action="store_true", default=env_bool("PD_APPLY"), help="Actually acknowledge incidents from the TUI.")
+    tui_parser.add_argument("--dry-run", action="store_true", help="Force dry-run mode even if PD_APPLY=true.")
+    tui_parser.add_argument("--interval", type=int, default=env_int("PD_POLL_SECONDS", 30), help="Polling interval in seconds.")
+
     check_parser = subparsers.add_parser(
         "check",
         help="Validate PagerDuty access and show current on-call/incident state.",
@@ -689,6 +699,29 @@ def doctor_command(config: Config) -> int:
     return 0
 
 
+def tui_command(config: Config) -> int:
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        raise ConfigError("The TUI requires an interactive terminal. Use `pd-auto-ack run` for logs, cron, or redirected output.")
+
+    try:
+        from .tui import run_tui
+    except ModuleNotFoundError as exc:
+        if exc.name and (exc.name == "textual" or exc.name.startswith("textual.")):
+            raise ConfigError(
+                "The TUI requires Textual. Install with "
+                '`pipx install "pagerduty-oncall-ack[tui]"` for a fresh install, '
+                "or `pipx inject pagerduty-oncall-ack textual` for an existing pipx install."
+            ) from exc
+        raise
+
+    config = resolve_identity(config)
+    if not config.user_id:
+        raise ConfigError("PD_USER_ID could not be resolved.")
+    if not config.from_email:
+        raise ConfigError("PD_FROM_EMAIL could not be resolved.")
+    return run_tui(config)
+
+
 def init_command(env_file: str, *, force: bool = False) -> int:
     path = create_env_file(env_file, force=force)
     print(f"Created {path}")
@@ -713,6 +746,8 @@ def main(argv: list[str] | None = None) -> int:
             return check_command(dataclasses.replace(config, apply=False))
         if args.command == "doctor":
             return doctor_command(config)
+        if args.command == "tui":
+            return tui_command(config)
         raise ConfigError(f"Unknown command: {args.command}")
     except KeyboardInterrupt:
         print("Stopped.", file=sys.stderr)

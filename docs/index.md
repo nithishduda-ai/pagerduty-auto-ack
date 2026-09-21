@@ -17,6 +17,7 @@
 - Checks whether the configured PagerDuty user is on call.
 - Displays open incidents assigned to that user.
 - Acknowledges only `triggered` incidents in live mode.
+- Provides an optional terminal dashboard for interactive monitoring.
 - Leaves all other incident fields alone.
 
 Dry-run mode is the default. Live acknowledgement requires `--apply` or `PD_APPLY=true`.
@@ -29,6 +30,13 @@ pd-auto-ack --version
 ```
 
 New to `pipx`? Use the [quick start](quick-start.md) for macOS and Linux setup steps.
+
+Optional terminal dashboard:
+
+```sh
+pipx install "pagerduty-oncall-ack[tui]"
+pd-auto-ack tui --env-file ~/.pd-auto-ack.env
+```
 
 ## Repository
 

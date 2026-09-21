@@ -100,6 +100,56 @@ Useful flags:
 - `--apply`: live mode. Actually acknowledge matching incidents.
 - `--dry-run`: force dry-run mode even if `PD_APPLY=true` is set in the env file.
 
+## `pd-auto-ack tui`
+
+Opens an optional k9s-style terminal dashboard.
+
+Install the dashboard extra for a fresh install:
+
+```sh
+pipx install "pagerduty-oncall-ack[tui]"
+```
+
+For an existing `pipx` install:
+
+```sh
+pipx inject pagerduty-oncall-ack textual
+```
+
+Dry-run dashboard:
+
+```sh
+pd-auto-ack tui --env-file ~/.pd-auto-ack.env
+```
+
+Live dashboard:
+
+```sh
+pd-auto-ack tui --env-file ~/.pd-auto-ack.env --apply
+```
+
+What it does:
+
+- Opens a full-screen terminal UI.
+- Refreshes on the configured interval.
+- Shows on-call state, open incidents, eligible triggered incidents, selected incident details, recent events, and API calls made in the last poll.
+- Uses the same safety rules as `run`.
+- Starts in dry-run mode unless `--apply` or `PD_APPLY=true` is set.
+- Requires an interactive terminal.
+
+Keys:
+
+- `r`: refresh now.
+- `p`: pause or resume polling.
+- `q`: quit.
+
+Useful flags:
+
+- `--env-file PATH`: load config from a specific env file.
+- `--interval SECONDS`: wait this many seconds between refreshes.
+- `--apply`: live mode. Actually acknowledge matching incidents.
+- `--dry-run`: force dry-run mode even if `PD_APPLY=true` is set in the env file.
+
 ## Common Flags
 
 - `--env-file PATH`: path to the config file. Example: `~/.pd-auto-ack.env`.

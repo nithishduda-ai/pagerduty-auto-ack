@@ -4,6 +4,12 @@ All notable user-facing changes to `pagerduty-oncall-ack` are documented here.
 
 ## Unreleased
 
+## 0.5.0 - 2026-09-21
+
+### Added
+
+- Added an optional Textual-powered `pd-auto-ack tui` terminal dashboard.
+
 ## 0.4.1 - 2026-09-21
 
 ### Changed
